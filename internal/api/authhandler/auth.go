@@ -1,4 +1,5 @@
-package api
+// Handlers for auth
+package authhandler
 
 import (
 	"context"
@@ -8,9 +9,21 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
+
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth/gothic"
+	"google.golang.org/api/idtoken"
 )
+
+func MountAuthRoutes(r *chi.Mux) {
+	authRouter := chi.NewRouter()
+
+	authRouter.Get("/{provider}/callback", GetAuthCallback)
+	authRouter.Get("/{provider}/logout", Logout)
+	authRouter.Get("/{provider}", GetAuth)
+
+	r.Mount("/auth", authRouter)
+}
 
 func GetAuth(w http.ResponseWriter, r *http.Request) {
 	frontend := getFrontendURL()
@@ -40,7 +53,11 @@ func GetAuthCallback(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(w, r)
 	}
 
-	fmt.Println(user)
+	payload, err := idtoken.Validate(context.Background(), user.IDToken, "892354348880-vs85bmutlchchnt3d09u6p7t8o41h8a1.apps.googleusercontent.com")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Print(payload.Claims)
 
 	http.Redirect(w, r, frontend, http.StatusFound)
 }
