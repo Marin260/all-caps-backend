@@ -1,6 +1,7 @@
 package healthhandlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -10,10 +11,15 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/require"
 )
 
 type Server struct {
 	port int
+}
+
+type HelloResponse struct {
+	Message string `json:"message"`
 }
 
 // setup test server
@@ -60,13 +66,16 @@ func TestHello(t *testing.T) {
 
 	req, _ := http.NewRequest("GET", "/hello", nil)
 	
-	response := executeRequest(req, s)
+	res := executeRequest(req, s)
 	
-	fmt.Println("RESPONSE: ", response)
+	checkHelloResponseCode(t, http.StatusOK, res.Code)
 
+	var response HelloResponse
+	err := json.NewDecoder(res.Body).Decode(&response)
+	if err != nil {
+        t.Fatalf("Failed to unmarshal response: %v", err)
+    }
 
-	checkHelloResponseCode(t, http.StatusOK, response.Code)
-
-	// TODO CHECK RESPONSE BODY
-	//require.Equal(t, "Hello World", response.Body)
+	require.Equal(t, "Hello World", response.Message)
+	require.NotEmpty(t, response.Message)
 }
