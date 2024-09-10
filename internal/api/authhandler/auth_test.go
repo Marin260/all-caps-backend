@@ -2,41 +2,21 @@ package authhandler
 
 import (
 	"fmt"
-	"net/http"
 	"os"
-	"strconv"
-	"time"
+	"testing"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/stretchr/testify/require"
 )
 
-type Server struct {
-	port int
-}
+// Auth routes not tested, I will blindly believe that google knows how to implement auth
+// TODO: implement this one day
+func TestGetFrontendURL(t *testing.T) {
 
-// setup server
-func NewTestServer(r *chi.Mux) *http.Server {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	NewServer := &Server{
-		port: port,
-	}
+	expectedURL := "http://localhost:4200/"
+	dir, _ := os.Getwd()
 
-	// Declare Server config
-	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      r,
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-	}
+	fmt.Println(dir)
 
-	return server
-}
-
-func testHello() {
-	r := chi.NewRouter()
-
-	r.Use(middleware.Logger)
-
+	requestdURL := getFrontendURL()
+	require.Equal(t, expectedURL, requestdURL)
 }

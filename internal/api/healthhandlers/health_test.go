@@ -14,7 +14,7 @@ type HelloResponse struct {
 }
 
 func TestHello(t *testing.T) {
-	server :=httptest.NewServer(http.HandlerFunc(HelloWorldHandler))
+	server := httptest.NewServer(http.HandlerFunc(HelloWorldHandler))
 	res, err := http.Get(server.URL)
 	if err != nil {
 		t.Error(err)
@@ -27,8 +27,8 @@ func TestHello(t *testing.T) {
 	var response HelloResponse
 	err = json.NewDecoder(res.Body).Decode(&response)
 	if err != nil {
-        t.Fatalf("Failed to unmarshal response: %v", err)
-    }
+		t.Fatalf("Failed to unmarshal response: %v", err)
+	}
 
 	require.Equal(t, "Hello World", response.Message)
 	require.NotEmpty(t, response.Message)

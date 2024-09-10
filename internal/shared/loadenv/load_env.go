@@ -14,16 +14,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const projectDirName = "all-caps-backend" 
+const projectDirName = "all-caps-backend"
 
 func LoadEnv() {
-    projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-    currentWorkDirectory, _ := os.Getwd()
-    rootPath := projectName.Find([]byte(currentWorkDirectory))
+	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	currentWorkDirectory, _ := os.Getwd()
+	rootPath := projectName.Find([]byte(currentWorkDirectory))
 
-    err := godotenv.Load(string(rootPath) + `/.env`)
+	err := godotenv.Load(string(rootPath) + `/.env`)
 
-    if err != nil {
-        log.Fatalf("Error loading .env file")
-    }
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 }
