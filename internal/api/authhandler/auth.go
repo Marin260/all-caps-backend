@@ -4,15 +4,15 @@ package authhandler
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/joho/godotenv"
 	"github.com/markbates/goth/gothic"
 	"google.golang.org/api/idtoken"
+
+	"github.com/Marin260/all-caps-backend/internal/shared/loadenv"
 )
 
 func MountAuthRoutes(r *chi.Mux) {
@@ -74,10 +74,8 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func getFrontendURL() string {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	loadenv.LoadEnv()
+
 	frontend := os.Getenv("FRONTEND_URL")
 
 	return frontend

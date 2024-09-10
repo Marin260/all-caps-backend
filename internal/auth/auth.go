@@ -1,21 +1,17 @@
 package auth
 
 import (
-	"log"
 	"os"
 
+	"github.com/Marin260/all-caps-backend/internal/shared/loadenv"
 	"github.com/gorilla/sessions"
-	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
 )
 
 func NewAuth() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	loadenv.LoadEnv()
 
 	key := os.Getenv("AUTH_SECRET")
 	MaxAge := 86400 * 30
