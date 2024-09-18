@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 
@@ -72,6 +73,16 @@ func GetAuthCallback(w http.ResponseWriter, r *http.Request) {
 	fmt.Println()
 	fmt.Println(access_token)
 	fmt.Println()
+
+	cookie := http.Cookie{
+		Name:     "access_token",
+		Value:    access_token,
+		Expires:  time.Now().Add(24 * time.Hour),
+		Secure:   true,
+		HttpOnly: true,
+		Path:     "/",
+	}
+	http.SetCookie(w, &cookie)
 
 	http.Redirect(w, r, frontend, http.StatusFound)
 }

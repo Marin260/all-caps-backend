@@ -11,11 +11,17 @@ import (
 )
 
 func CreateJWT(user_email string) (string, error) {
+	// TODO: Get user from db
+	// TODO: Get user role from db, roles will be used in FE guards for RBAC 
+
+	harcoded_tmp_role := "8fb2269c-143a-4901-b6b5-2b7e811a9855" // role guid
+
 	loadenv.LoadEnv()
 	t := time.Now().Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_email": user_email,
 		"iat":        t, // TODO: add more claims
+		"role":       harcoded_tmp_role,
 	})
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("AC_TOKEN_SECRET")))

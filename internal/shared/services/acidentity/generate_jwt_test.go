@@ -11,7 +11,6 @@ func TestCreateJWT(t *testing.T) {
 	testUser1 := "test_user1@gmail.com"
 	testUser2 := "test_user2@gmail.com"
 
-
 	token1, err := CreateJWT(testUser1)
 	if err != nil {
 		t.Fatalf("Failed to create a JWT token: %s", err)
@@ -22,8 +21,8 @@ func TestCreateJWT(t *testing.T) {
 	}
 	time.Sleep(1 * time.Second)
 
-	token3, err := CreateJWT(testUser1)
-	
+	token3, err := CreateJWT(testUser1) // if the same user requests the token should be different
+
 	if err != nil {
 		t.Fatalf("Failed to create a JWT token: %s", err)
 	}
