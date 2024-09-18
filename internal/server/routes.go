@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/Marin260/all-caps-backend/internal/api/authhandler"
-	"github.com/Marin260/all-caps-backend/internal/api/healthhandlers"
+	"github.com/Marin260/all-caps-backend/internal/api/handlers/authhandler"
+	"github.com/Marin260/all-caps-backend/internal/api/handlers/healthhandlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )

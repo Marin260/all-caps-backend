@@ -13,7 +13,12 @@ import (
 	"google.golang.org/api/idtoken"
 
 	"github.com/Marin260/all-caps-backend/internal/shared/loadenv"
+	"github.com/Marin260/all-caps-backend/internal/shared/services/acidentity"
 )
+
+type AuthResponse struct {
+	Email string `json:"email"`
+}
 
 func MountAuthRoutes(r *chi.Mux) {
 	authRouter := chi.NewRouter()
@@ -57,7 +62,16 @@ func GetAuthCallback(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Print(payload.Claims)
+	fmt.Println(payload.Claims)
+
+	access_token, err := acidentity.CreateJWT(user.Email)
+	if err != nil {
+		fmt.Println("There was an error while creating the access_token")
+	}
+
+	fmt.Println()
+	fmt.Println(access_token)
+	fmt.Println()
 
 	http.Redirect(w, r, frontend, http.StatusFound)
 }
