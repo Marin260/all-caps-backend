@@ -59,20 +59,17 @@ func GetAuthCallback(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(w, r)
 	}
 
-	payload, err := idtoken.Validate(context.Background(), user.IDToken, "892354348880-vs85bmutlchchnt3d09u6p7t8o41h8a1.apps.googleusercontent.com")
+	_, err = idtoken.Validate(context.Background(), user.IDToken, "892354348880-vs85bmutlchchnt3d09u6p7t8o41h8a1.apps.googleusercontent.com")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(payload.Claims)
 
-	access_token, err := acidentity.CreateJWT(user.Email)
+	access_token, err := acidentity.CreateToken(user.Email)
 	if err != nil {
 		fmt.Println("There was an error while creating the access_token")
 	}
 
-	fmt.Println()
-	fmt.Println(access_token)
-	fmt.Println()
+	acidentity.VerifyToken(access_token)
 
 	cookie := http.Cookie{
 		Name:     "access_token",
